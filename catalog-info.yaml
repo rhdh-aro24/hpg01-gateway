@@ -1,0 +1,68 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hpg01-poi-gateway-app-dev
+  annotations:
+    argocd/app-name: hpg01-poi-gateway-app-dev
+    backstage.io/kubernetes-id: hpg01-poi-gateway-app
+    backstage.io/kubernetes-namespace: hpg01
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: rhdh-aro24/hpg01-gateway
+    janus-idp.io/tekton-enabled: 'true'
+  tags:
+    - java
+    - quarkus
+    - maven
+    - workshop
+  links:
+    - url: https://console-openshift-console.apps.kovj5vhc.eastus.aroapp.io/dev-pipelines/ns/hpg01/
+      title: Pipelines
+      icon: web
+    - url: https://console-openshift-console.apps.kovj5vhc.eastus.aroapp.io/k8s/ns/hpg01/deployments/hpg01-poi-gateway-app
+      title: Deployment
+      icon: web
+    - url: https://devspaces.apps.kovj5vhc.eastus.aroapp.io/#https://github.com/rhdh-aro24/hpg01-gateway?che-editor=che-incubator/che-code/latest&devfilePath=.devfile-vscode.yaml
+      title: OpenShift Dev Spaces (VS Code)
+      icon: web
+spec:
+  type: service
+  lifecycle: production
+  owner: "user:hpgrahsl"
+  system: workshop-system-hpg01
+  providesApis:
+    - gateway-api-hpg01
+  consumesApis:
+    - backend-api-hpg01
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: workshop-system-hpg01
+  tags:
+    - backstage
+    - janus-idp
+    - openshift
+    - workshop
+    - rh-summit
+spec:
+  owner: "user:hpgrahsl"
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: gateway-api-hpg01
+  description: API surface exposed to interact with Backends (summit POIs + parks data) via the Gateway
+  links:
+    - url: http://hpg01-poi-gateway-app-hpg01.apps.kovj5vhc.eastus.aroapp.io/q/swagger-ui
+      title: Swagger UI
+      icon: web
+    - url: https://github.com/rhdh-aro24/hpg01-gateway/tree/main/src/main/resources/META-INF/openapi.yaml
+      title: API Spec
+      icon: code
+spec:
+  type: openapi
+  lifecycle: production
+  owner: "user:hpgrahsl"
+  system: workshop-system-hpg01
+  definition:
+    $text: https://github.com/rhdh-aro24/hpg01-gateway/tree/main/src/main/resources/META-INF/openapi.yaml
